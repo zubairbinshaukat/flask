@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to Movie Streaming</h1>
+<div class="movie-list">
+    {% for movie_id, movie in movies.items() %}
+    <div class="movie">
+        <img src="{{ url_for('static', filename='images/' + movie.poster) }}" alt="{{ movie.title }}">
+        <h2>{{ movie.title }}</h2>
+        <p>{{ movie.description }}</p>
+        <a href="{{ url_for('movie', movie_id=movie_id) }}">View Details</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
