@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify,request
 import requests
+import os
 from markupsafe import Markup
 # import google.generativeai as genai
 
@@ -80,4 +81,6 @@ def search():
     return render_template("home.html", movies=results, page=page, total_pages=total_pages, query=query)
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    # app.run(debug=False)
+    port = int(os.environ.get("PORT", 5000))  # Get the PORT variable from the environment
+    app.run(debug=False, host="0.0.0.0", port=port)
