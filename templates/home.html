@@ -1,17 +1,106 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
 
-{% block title %}Home{% endblock %}
+<div
+  class="movie-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+>
+  {% for movie in movies %}
+  <div
+    class="movie bg-white hover:-translate-y-1 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+  >
 
-{% block content %}
-<h1>Welcome to Movie Streaming</h1>
-<div class="movie-list">
-    {% for movie_id, movie in movies.items() %}
-    <div class="movie">
-        <img src="{{ url_for('static', filename='images/' + movie.poster) }}" alt="{{ movie.title }}">
-        <h2>{{ movie.title }}</h2>
-        <p>{{ movie.description }}</p>
-        <a href="{{ url_for('movie', movie_id=movie_id) }}">View Details</a>
+    <img
+      class="w-full h-72 object-cover rounded-t-lg"
+      
+      src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" 
+      alt="{{ movie.title }}"
+    />
+    <div class="p-4">
+      <h2 class="text-lg font-semibold text-gray-900">
+        {{ movie.title or movie.name }}
+      </h2>
+      <h2 class="text-gray-600">
+        {{ movie.release_date }}
+      </h2>
+      <a
+        class="inline-block mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+        href="{{ url_for('movie', movie_id=movie.id) }}"
+      >
+        Watch Now
+      </a>
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
+
+  
+  
+  
+  
 </div>
+<div class="flex gap-2 w-full justify-center py-4">
+  <!-- Previous Button -->
+  {% if page > 1 %}
+  <a
+    href="{{ url_for('home', page=page-1) }}"
+    class="rounded-md border border-slate-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg bg-blue-500 text-white  hover:bg-blue-600 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+  >
+    Prev
+  </a>
+  {% endif %}
+
+  <!-- First Page, 1, 2, 3 -->
+  {% if page > 3 %}
+  <a
+    href="{{ url_for('home', page=1) }}"
+    class="min-w-9 rounded-md py-2 px-3 border border-slate-300 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-blue-500 hover:border-slate-800 focus:text-white focus:bg-blue-600 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-blue-600 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+  >
+    1
+  </a>
+  <span class="text-slate-600">...</span>
+  {% endif %}
+
+  <!-- Page Number Buttons (1, 2, 3...) -->
+  {% for num in range(page-1, page+2) %}
+    {% if num > 0 and num <= total_pages %}
+    <a
+      href="{{ url_for('home', page=num) }}"
+      class="min-w-9 rounded-md py-2 px-3 border border-slate-300 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-blue-500 hover:border-slate-800 focus:text-white focus:bg-blue-600 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-blue-600 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+    >
+      {{ num }}
+    </a>
+    {% endif %}
+  {% endfor %}
+
+  <!-- Ellipsis for middle skipped pages -->
+  {% if page < total_pages - 2 %}
+  <span class="text-slate-600">...</span>
+  {% endif %}
+
+  <!-- Last Page, 499, 500 -->
+  {% if page < total_pages - 2 %}
+  <a
+    href="{{ url_for('home', page=total_pages-1) }}"
+    class="min-w-9 rounded-md py-2 px-3 border border-slate-300 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-blue-500 hover:border-slate-800 focus:text-white focus:bg-blue-600 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-blue-600 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+  >
+    {{ total_pages-1 }}
+  </a>
+  <a
+    href="{{ url_for('home', page=total_pages) }}"
+    class="min-w-9 rounded-md py-2 px-3 border border-slate-300 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-blue-500 hover:border-slate-800 focus:text-white focus:bg-blue-600 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-blue-600 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+  >
+    {{ total_pages }}
+  </a>
+  {% endif %}
+
+  <!-- Next Button -->
+  {% if page < total_pages %}
+  <a
+    href="{{ url_for('home', page=page+1) }}"
+    class="rounded-md border border-slate-300 py-2 px-3 text-center text-sm transition-all shadow-sm hover:shadow-lg bg-blue-500 text-white  hover:bg-blue-600 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+  >
+    Next
+  </a>
+  {% endif %}
+</div>
+
 {% endblock %}
