@@ -80,4 +80,4 @@ def search():
     return render_template("home.html", movies=results, page=page, total_pages=total_pages, query=query)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
